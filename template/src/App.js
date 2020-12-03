@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import {Header, Footer} from './layout';
+import Home from './pages/Home';
+
 
 import './App.css';
 
@@ -15,18 +17,10 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Header/>
-            <button>You</button>
-            <input type='text'></input>
             <Route
               exact
               path="/"
-              render={props => (
-                <React.Fragment>
-                  <h1>
-                    Core content
-                  </h1>
-                </React.Fragment>
-              )}
+              render={Home}
             />
 
             <Footer/>
