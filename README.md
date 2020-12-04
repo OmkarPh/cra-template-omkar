@@ -3,7 +3,7 @@
 ### npx
 
 ```sh
-npx create-react-app my-app --template dmontee
+npx create-react-app my-app --template omkar
 ```
 
 ## Includes
