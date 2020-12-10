@@ -1,41 +1,48 @@
 import { useState } from 'react';
 
+export default function useLocalStorageState(key, defaultValue, parseJson=true){
 
-export default useLocalStorageState = (key, defaultValue, parseJson=true) => {
 
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      // Get key from local storage
-      const item = window.localStorage.getItem(key);
+  // Default value for initialState
+  let initialState = defaultValue;
+  try {
+    // Get key from local storage
+    const item = window.localStorage.getItem(key);
 
-      // Return string as it is in case user specified
-      if(!parseJson)
-          return item ? item : defaultValue;
-
-      // Parse string to json rest of the time
-      return item ? JSON.parse(item) : defaultValue;
-
-    } catch (error) {
-      console.log(error);
-      console.log("The above error occured most probably because someone tampered with localstorage !");
-      return defaultValue;
+    // If not already in localstorage, put default value into localstorage
+    if(!item){
+      if(parseJson)
+        window.localStorage.setItem(key, JSON.stringify(defaultValue));
+      else
+        window.localStorage.setItem(key, defaultValue);      
+    } else{
+      // Return already set value rest of the time
+      if(parseJson)
+        initialState = JSON.parse(item);
+      else
+        initialState = item;
     }
-  });
+  } catch (error) {
+    console.log(error);
+    console.log("The above error occured most probably because someone tampered with localstorage !");
+  }
 
+  const [state, setState] = useState(initialState);
 
+  // Wrapper to Sync changes in state to storage
   const setValue = value => {
     try {
       // Allow value to be a function so we have same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const valueToStore = value instanceof Function ? value(state) : value;
 
       // Save state
-      setStoredValue(valueToStore);
+      setState(valueToStore);
 
-      // Set string as it is in case user specified
+      // Set string as it is in local storage
       if(!parseJson)
         return window.localStorage.setItem(key, valueToStore);
         
-      // Save to local storage
+      // Stringify before saving to local storage
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
       // A more advanced implementation would handle the error case
@@ -43,5 +50,16 @@ export default useLocalStorageState = (key, defaultValue, parseJson=true) => {
     }
   };
 
-  return [storedValue, setValue];
+  const removeValue = () => {
+    try {
+      localStorage.removeItem(key);
+      setState(undefined);
+    } catch(error) {
+      // If user is in private mode or has storage restriction
+      // localStorage can throw.
+      console.log(error);
+    }
+  }
+
+  return [state, setValue, removeValue];
 }
