@@ -3,7 +3,7 @@
 ### npx
 
 ```sh
-npx create-react-app my-app --template omkar
+npx create-react-app your-app-name --template omkar
 ```
 
 ## Includes

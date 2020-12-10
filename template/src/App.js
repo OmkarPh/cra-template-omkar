@@ -18,12 +18,8 @@ class App extends Component {
         <div className="App">
           <div className="container">
             <Header/>
-            <Route
-              exact
-              path="/"
-              render={Home}
-            />
-
+                <Route exact path="/"> <Home/> </Route>
+    
             <Footer/>
           </div>
         </div>
