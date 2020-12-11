@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function useLocalStorageState(key, defaultValue, parseJson=true){
 
-
   // Default value for initialState
   let initialState = defaultValue;
+
+  if(!parseJson && typeof defaultValue !== "string"){
+    throw new Error("If parseJson is specified false, defaultValue must be a string; otherwise set parseJson to true");
+  }
+
   try {
     // Get key from local storage
     const item = window.localStorage.getItem(key);
@@ -60,6 +64,31 @@ export default function useLocalStorageState(key, defaultValue, parseJson=true){
       console.log(error);
     }
   }
+
+  
+  useEffect(() => {
+    // Sync changes done in storage to state automatically
+    function checkChanges(event) {
+      const item = event.newValue;
+      if (item) {
+        if(parseJson)
+          setState(JSON.parse(item));
+        else 
+          setState(item);
+      }else{
+        if(parseJson)
+          setState(defaultValue);
+        else
+          setState(defaultValue);
+      }
+    }
+
+    window.addEventListener("storage", event => event.key === key ? checkChanges(event) : "");
+
+    return () => {
+      window.removeEventListener("storage", event =>event.key === key ? checkChanges(event) : "");
+    };
+  }, [key]);
 
   return [state, setValue, removeValue];
 }

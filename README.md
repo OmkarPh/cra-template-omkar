@@ -13,9 +13,9 @@ npx create-react-app your-app-name --template omkar
 
 ## Features
 
-- VS Code support
-- Custom hooks added
 - Custom layout elements added
+- Custom hooks added
+    - useLocalStorageState (2 way sync between state and localstorage)
 
 ## License
 

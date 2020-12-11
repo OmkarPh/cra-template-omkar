@@ -1,15 +1,11 @@
 {
   "name": "cra-template-omkar",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Omkar Phansopkar",
   "keywords": [
-    "react",
-    "create-react-app",
-    "template",
-    "omkar",
-    "custom-template"
+    "react", "create-react-app", "custom-template", "template", "omkar", "OmkarPh", "styled-components", "custom-hooks"
   ],
-  "description": "A custom template for Create React App by Omkar Phansopkar",
+  "description": "A custom template for Create React App by Omkar Phansopkar with helpful hooks and layout components",
   "main": "template.json",
   "repository": {
     "type": "git",
